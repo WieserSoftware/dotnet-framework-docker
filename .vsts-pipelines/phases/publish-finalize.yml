@@ -22,7 +22,7 @@ phases:
       - template: ../steps/docker-cleanup-linux.yml
       - script: docker pull $(imageBuilder.image)
         displayName: Pull Image Builder
-      - script: docker run --name publish_$(docker.baseArtifactName) $(docker.commonRunArgs) publishManifest $(imageBuilder.commonCmdArgs) --repo-ownerride microsoft/dotnet-framework=msimons/dotnet-framework --repo-override microsoft/dotnet-framework-build=msimons/dotnet-framework-build
+      - script: docker run --name publish_$(docker.baseArtifactName) $(docker.commonRunArgs) publishManifest $(imageBuilder.commonCmdArgs) --repo-override microsoft/dotnet-framework=msimons/dotnet-framework --repo-override microsoft/dotnet-framework-build=msimons/dotnet-framework-build
         displayName: Publish Manifest
       - script: docker run --name readme_$(docker.baseArtifactName) $(docker.commonRunArgs) updateReadme $(imageBuilder.commonCmdArgs)
         displayName: Update Readme
