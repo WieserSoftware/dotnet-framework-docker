@@ -14,13 +14,16 @@ phases:
       repo: dotnet-framework-samples
       matrixWindowsLtsc2016Amd64:
         Build:
-          buildPath: '*'
+          dotnetVersion: ''
+          imageBuilder.path: '*'
           osVersion: windowsservercore-ltsc2016
       matrixWindows1709Amd64:
         Build:
-          buildPath: '*'
+          dotnetVersion: ''
+          imageBuilder.path: '*'
           osVersion: windowsservercore-1709
       matrixWindows1803Amd64:
         Build:
-          buildPath: '*'
+          dotnetVersion: ''
+          imageBuilder.path: '*'
           osVersion: windowsservercore-1803

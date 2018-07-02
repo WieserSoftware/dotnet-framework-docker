@@ -18,6 +18,7 @@ phases:
       docker.baseArtifactName: $(Build.BuildId)
       docker.setupContainerName: setup_$(docker.baseArtifactName)
       imageBuilder.image: ${{ parameters.imageBuilderImage }}
+      imageBuilder.path: $(dotnetVersion)-*
       manifest: ${{ parameters.manifest }}
       repo: ${{ parameters.repo }}
     steps:
@@ -31,6 +32,6 @@ phases:
       - script: docker rm -f $(docker.setupContainerName)
         displayName: Cleanup Setup Container
         continueOnError: true
-      - script: $(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder/Microsoft.DotNet.ImageBuilder.exe build --manifest $(manifest) --path $(buildPath) --os-version $(osVersion) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --repo-override microsoft/$(repo)-build=$(acr.server)/$(repo)-build-$(stagingRepo.suffix) --skip-test --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
+      - script: $(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder/Microsoft.DotNet.ImageBuilder.exe build --manifest $(manifest) --path $(imageBuilder.path) --os-version $(osVersion) --repo-override microsoft/$(repo)=$(acr.server)/$(repo)-$(stagingRepo.suffix) --repo-override microsoft/$(repo)-build=$(acr.server)/$(repo)-build-$(stagingRepo.suffix) --skip-test --push --server $(acr.server) --username $(acr.userName) --password $(BotAccount-dotnet-docker-acr-bot-password) $(imageBuilder.queueArgs)
         displayName: Build Images
       - template: ../steps/docker-cleanup-windows.yml
