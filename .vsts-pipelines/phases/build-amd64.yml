@@ -12,7 +12,7 @@ phases:
       name: DotNetCore-Infra
       demands: ${{ parameters.demands }}
       parallel: 100
-      timeoutInMinutes: 240
+      timeoutInMinutes: 180
       matrix: ${{ parameters.matrix }}
     variables:
       docker.baseArtifactName: $(Build.BuildId)
