@@ -27,7 +27,7 @@ if (!(Test-Path $dotnetInstallScriptPath)) {
     Invoke-WebRequest $dotnetInstallScriptUrl -OutFile $dotnetInstallScriptPath
 }
 
-& $dotnetInstallScriptPath -Channel "release-2.0.0" -Version "2.0.0" -Architecture x64 -InstallDir $dotnetInstallDir
+& $dotnetInstallScriptPath -Channel "2.1" -Version "latest" -Architecture x64 -InstallDir $dotnetInstallDir
 if ($LASTEXITCODE -ne 0) { throw "Failed to install the .NET Core SDK" }
 
 # Run Tests
@@ -35,5 +35,5 @@ $env:IMAGE_OS_FILTER = $OSFilter
 $env:IMAGE_VERSION_FILTER = $VersionFilter
 $env:REPO = $Repo
 
-& dotnet test -c Release -v n $PSScriptRoot/Microsoft.DotNet.Framework.Docker.Tests/Microsoft.DotNet.Framework.Docker.Tests.csproj
+& dotnet test -c Release --logger:trx $PSScriptRoot/Microsoft.DotNet.Framework.Docker.Tests/Microsoft.DotNet.Framework.Docker.Tests.csproj
 if ($LASTEXITCODE -ne 0) { throw "Tests Failed" }
