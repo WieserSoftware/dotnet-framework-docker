@@ -1,13 +1,12 @@
 parameters:
   phase: null
-  excludeTests: false
   dependsOn: null
   repo: null
   demands: []
   matrix: {}
 phases:
   - phase: ${{ parameters.phase }}
-    condition: and(not(variables['excludeTests']), or(succeeded(), eq(variables['startingPhase'], 'test')))
+    condition: and(ne(variables['repo'], 'dotnet-framework-samples'), or(succeeded(), eq(variables['startingPhase'], 'test')))
     dependsOn: ${{ parameters.dependsOn }}
     queue:
       name: DotNetCore-Infra

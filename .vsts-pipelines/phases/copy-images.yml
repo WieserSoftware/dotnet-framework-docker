@@ -8,8 +8,11 @@ parameters:
   matrix: {}
 phases:
   - phase: ${{ parameters.phase }}
-    condition: or(succeeded(), eq(variables['startingPhase'], 'publish'))
-    dependsOn: ${{ parameters.dependsOn }}
+    condition: or(succeeded(), eq(variables['startingPhase'], 'publish'), eq(variables['startingPhase'], 'publish'), and(eq(variables['repo'], 'dotnet-framework-samples'), succeeded('Build_NanoServerSac2016_amd64'), succeeded('Build_NanoServer1709_amd64'), succeeded('Build_NanoServer1803_amd64')))
+    dependsOn:
+      - Test_NanoServerSac2016_amd64
+      - Test_NanoServer1709_amd64
+      - Test_NanoServer1803_amd64
     queue:
       name: DotNetCore-Infra
       demands: ${{ parameters.demands }}
@@ -33,6 +36,6 @@ phases:
       - script: docker rm -f $(docker.setupContainerName)
         displayName: Cleanup Setup Container
         continueOnError: true
-      - script: $(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder/Microsoft.DotNet.ImageBuilder.exe copyImages --manifest $(manifest) --path $(imageBuilder.path) --os-version $(osVersion) --source-server $(acr.server) --source-username $(acr.userName) --source-password $(BotAccount-dotnet-docker-acr-bot-password) --destination-username $(dockerRegistry.userName) --destination-password $(BotAccount-dotnet-dockerhub-bot-password) $(imageBuilder.queueArgs) $(acr.server)/$(repo)-$(stagingRepo.suffix) --repo-override microsoft/dotnet-framework=msimons/dotnet-framework --repo-override microsoft/dotnet-framework-build=msimons/dotnet-framework-build
+      - script: $(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder/Microsoft.DotNet.ImageBuilder.exe copyImages --manifest $(manifest) --path $(imageBuilder.path) --os-version $(osVersion) --source-server $(acr.server) --source-username $(acr.userName) --source-password $(BotAccount-dotnet-docker-acr-bot-password) --destination-username $(dockerRegistry.userName) --destination-password $(BotAccount-dotnet-dockerhub-bot-password) $(imageBuilder.queueArgs) $(imageBuilder.publishQueueArgs) $(acr.server)/$(repo)-$(stagingRepo.suffix)
         displayName: Copy Images
       - template: ../steps/docker-cleanup-windows.yml
